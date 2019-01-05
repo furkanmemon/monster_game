@@ -3,68 +3,69 @@
 author : furkan
 date: january 5 2019 -->
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Monster Slayer</title>
-    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/foundation.min.css">
-  </head>
-  <body>
 
-    <div id="app">
-      <section class="row">
-        <div class="small-6-columns">
-          <h1 class="text-center">YOU</h1>
-          <div class="healthbar" v-bind:style="{width: player_health+'%'}">
-            <div v-show="playing" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-              {{player_health}}
-            </div>
+<head>
+  <meta charset="utf-8">
+  <title>Monster Slayer</title>
+  <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/foundation.min.css">
+</head>
+
+<body>
+
+  <div id="app">
+    <section class="row">
+      <div class="small-6-columns">
+        <h1 class="text-center">YOU</h1>
+        <div class="healthbar" v-bind:style="{width: player_health+'%'}">
+          <div v-show="playing" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+            {{player_health}}
           </div>
         </div>
+      </div>
 
-        <div class="small-6-columns">
-          <h1 class="text-center">MONSTER</h1>
-          <div class="healthbar" v-bind:style="{width: monster_health+'%'}">
-            <div v-show="playing" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-              {{monster_health}}
-            </div>
+      <div class="small-6-columns">
+        <h1 class="text-center">MONSTER</h1>
+        <div class="healthbar" v-bind:style="{width: monster_health+'%'}">
+          <div v-show="playing" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+            {{monster_health}}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="row controls">
-        <div class="small-12 columns">
-          <button v-on:click="start()"id="start-game">START NEW GAME</button>
-        </div>
-      </section>
+    <section class="row controls">
+      <div class="small-12 columns">
+        <button v-on:click="start()" id="start-game">START NEW GAME</button>
+      </div>
+    </section>
 
-      <section v-show="playing" class="row controls">
-        <div class="small-12 columns">
-          <button v-on:click="attack()" id="attack">ATTACK</button>
-          <button id="special-attack">SPECIAL ATTACK</button>
-          <button v-on:click="heal()" id="heal">HEAL</button>
-          <button v-on:click="give_up()" id="give-up">GIVE UP</button>
-        </div>
-      </section>
+    <section v-show="playing" class="row controls">
+      <div class="small-12 columns">
+        <button v-on:click="attack()" id="attack">ATTACK</button>
+        <button v-on:click="special_attack()" id="special-attack">SPECIAL ATTACK</button>
+        <button v-on:click="heal()" id="heal">HEAL</button>
+        <button v-on:click="give_up()" id="give-up">GIVE UP</button>
+      </div>
+    </section>
 
-      <section class="row log">
-        <div class="small-12 columns">
-          <ul>
-            <li> </li>
-          </ul>
+    <section class="row log">
+      <div class="small-12 columns">
+        <ul>
+          <li> </li>
+        </ul>
 
-        </div>
+      </div>
 
-      </section>
+    </section>
 
-    </div>
+  </div>
 
 
-    <script>
-
+  <script>
     let app = new Vue({
-      el:'#app',
+      el: '#app',
       data: {
         playing: false,
         player_health: 100,
@@ -72,35 +73,65 @@ date: january 5 2019 -->
       },
       methods: {
         start: function() {
-          if(this.playing){
+          if (this.playing) {
             alert("Can't Quit !");
-          }
-          else{
+          } else {
             this.playing = true;
             this.player_health = 100;
             this.monster_health = 100;
           }
         },
 
-        give_up: function(){
-          if(confirm("Are you sure ?")){
-            alert("Try again :)");
+        give_up: function() {
+          if (confirm("Are you sure ?")) {
             this.playing = false;
+            this.player_health = 100;
+            this.monster_health = 100;
           }
         },
 
-        attack: function(){
-          this.monster_health -= Math.floor((Math.random()*20)+1);
-          this.player_health -= Math.floor((Math.random()*20)+1);
+        attack: function() {
+          this.monster_health -= Math.floor((Math.random() * 20) + 1);
+          this.player_health -= Math.floor((Math.random() * 20) + 1);
+          this.watch_win();
         },
 
-        heal: function(){
-          this.player_health += Math.floor((Math.random()*10)+1);
+        heal: function() {
+          if (this.player_health < 100) {
+            this.player_health += Math.floor((Math.random() * 10) + 1);
+          }
+          if (this.player_health >= 100) {
+            this.player_health = 100;
+          }
+
+        },
+
+        special_attack: function() {
+          this.monster_health -= Math.floor((Math.random() * 30) + 1);
+          this.player_health -= Math.floor((Math.random() * 15) + 1);
+          this.watch_win();
+        },
+
+        watch_win: function() {
+          if (this.player_health <= 0) {
+            if (confirm("You lost. Want to play again?")) {
+              this.start();
+            } else {
+              this.give_up();
+            }
+          } else if (this.monster_health <= 0) {
+            if (confirm("You Won !!! Want to play again?")) {
+              this.playing = false;
+              this.start();
+            } else {
+              this.give_up();
+            }
+          }
         }
       }
     });
+  </script>
 
-    </script>
+</body>
 
-  </body>
 </html>
