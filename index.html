@@ -53,7 +53,8 @@ date: january 5 2019 -->
     <section v-show="playing" class="row log">
       <div class="small-12 columns">
         <ul class="log">
-          <li v-for="entry in log"> {{ entry }} </li>
+          <li v-for="entry in log" v-if="entry[0]" v-bind:class={'player-turn':true}> {{ entry[1] }} </li>
+          <li v-else v-bind:class={'monster-turn':true}> {{entry[1]}} </li>
         </ul>
       </div>
     </section>
@@ -68,7 +69,7 @@ date: january 5 2019 -->
         playing: false,
         player_health: 100,
         monster_health: 100,
-        log: [] //to display log entries
+        log: [] //stores arrays to display logs for player and monster
       },
 
       methods: {
@@ -97,8 +98,8 @@ date: january 5 2019 -->
           let monster_damage =Math.floor((Math.random() * 20) + 1);
           this.monster_health -= player_damage;
           this.player_health -= monster_damage;
-          this.log.unshift('player hits monster for ' + player_damage);
-          this.log.unshift('monster hits player for ' + monster_damage);
+          this.log.unshift([true,'player hits monster for ' + player_damage]);
+          this.log.unshift([false,'monster hits player for ' + monster_damage]);
           this.watch_win();
         },
 
@@ -108,8 +109,8 @@ date: january 5 2019 -->
             let heal = Math.floor((Math.random() * 10) + 1);
             this.player_health += heal;
             this.player_health -= damage;
-            this.log.unshift('player healed for ' + heal);
-            this.log.unshift('monster hits player for ' + damage);
+            this.log.unshift([true,'player healed for ' + heal]);
+            this.log.unshift([false,'monster hits player for ' + damage]);
           }
           if (this.player_health >= 100) {
             this.player_health = 100;
@@ -121,8 +122,8 @@ date: january 5 2019 -->
           let monster_damage =Math.floor((Math.random() * 15) + 1);
           this.monster_health -= player_damage;
           this.player_health -= monster_damage;
-          this.log.unshift('player hits monster for' + player_damage);
-          this.log.unshift('monster hits player for' + monster_damage);
+          this.log.unshift([true,'player hits monster for ' + player_damage]);
+          this.log.unshift([false,'monster hits player for ' + monster_damage]);
           this.watch_win();
         },
 
