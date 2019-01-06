@@ -76,7 +76,7 @@ date: january 5 2019 -->
           if (this.playing) {
             alert("Can't Quit !");
           } else {
-            this.log = [];
+            this.log=[];
             this.playing = true;
             this.player_health = 100;
             this.monster_health = 100;
@@ -86,15 +86,15 @@ date: january 5 2019 -->
         give_up: function() {
           if (confirm("Are you sure ?")) {
             this.playing = false;
-            this.log = [];
+            this.log =[];
             this.player_health = 100;
             this.monster_health = 100;
           }
         },
 
         attack: function() {
-          let player_damage = Math.floor((Math.random() * 20) + 1);
-          let monster_damage = Math.floor((Math.random() * 20) + 1);
+          let player_damage =Math.floor((Math.random() * 20) + 1);
+          let monster_damage =Math.floor((Math.random() * 20) + 1);
           this.monster_health -= player_damage;
           this.player_health -= monster_damage;
           this.log.unshift('player hits monster for ' + player_damage);
@@ -114,8 +114,8 @@ date: january 5 2019 -->
         },
 
         special_attack: function() {
-          let player_damage = Math.floor((Math.random() * 30) + 1);
-          let monster_damage = Math.floor((Math.random() * 15) + 1);
+          let player_damage =Math.floor((Math.random() * 30) + 1);
+          let monster_damage =Math.floor((Math.random() * 15) + 1);
           this.monster_health -= player_damage;
           this.player_health -= monster_damage;
           this.log.unshift('player hits monster for' + player_damage);
@@ -123,21 +123,21 @@ date: january 5 2019 -->
           this.watch_win();
         },
 
-        //checking winning conditions
+//checking winning conditions
         watch_win: function() {
           if (this.player_health <= 0) {
             if (confirm("You lost. Want to play again?")) {
-              this.playing = false;
+              this.playing=false;
               this.start();
             } else {
-              this.give_up();
+              this.playing = false;
             }
           } else if (this.monster_health <= 0) {
             if (confirm("You Won !!! Want to play again?")) {
               this.playing = false;
               this.start();
             } else {
-              this.give_up();
+              this.playing = false;
             }
           }
         }
